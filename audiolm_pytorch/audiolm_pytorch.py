@@ -31,6 +31,7 @@ from tqdm import tqdm
 from pathlib import Path
 from audiolm_pytorch.version import __version__
 from packaging import version
+from .rmsnorm import RMSNorm as LayerNorm
 
 # helper functions
 
@@ -184,15 +185,6 @@ def get_embeds(
 
 # bias-less layernorm, being used in more recent T5s, PaLM, also in @borisdayma 's experiments shared with me
 # greater stability
-
-class LayerNorm(nn.Module):
-    def __init__(self, dim):
-        super().__init__()
-        self.gamma = nn.Parameter(torch.ones(dim))
-        self.register_buffer("beta", torch.zeros(dim))
-
-    def forward(self, x):
-        return F.layer_norm(x, x.shape[-1:], self.gamma, self.beta)
 
 # relative positional bias
 

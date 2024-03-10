@@ -34,17 +34,18 @@ class SoundDataset(Dataset):
     @beartype
     def __init__(
         self,
-        folder,
+        folders,
         target_sample_hz: Union[int, Tuple[int, ...]],  # target sample hz must be specified, or a tuple of them if one wants to return multiple resampled
         exts = ['flac', 'wav', 'mp3', 'webm'],
         max_length: Optional[int] = None,               # max length would apply to the highest target_sample_hz, if there are multiple
         seq_len_multiple_of: Optional[Union[int, Tuple[Optional[int], ...]]] = None
     ):
         super().__init__()
-        path = Path(folder)
-        assert path.exists(), f'folder "{str(path)}" does not exist'
+        paths = [Path(folder) for folder in folders]
+        for path in paths:
+            assert path.exists(), f'folder "{str(path)}" does not exist'
 
-        files = [file for ext in exts for file in path.glob(f'**/*.{ext}')]
+        files = [file for ext in exts for path in paths for file in path.glob(f'**/*.{ext}')]
         assert len(files) > 0, 'no sound files found'
 
         self.files = files

@@ -251,7 +251,8 @@ class SoundStreamTrainer(nn.Module):
         dataloader_drop_last = True,
         split_batches = False,
         use_wandb_tracking = False,
-        force_clear_prev_results: bool = None  # set to True | False to skip the prompt
+        force_clear_prev_results: bool = None,  # set to True | False to skip the prompt
+        metrics: Optional[Union[str, List[str]]] = None,
     ):
         """
         Initialize with a SoundStream instance and either a folder containing audio data or
